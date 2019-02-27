@@ -1,0 +1,169 @@
+<div class="card card-1" style="width: 25rem; height: 95vh;">
+
+    <div >
+      
+      <div class="alert alert-warning" id="index" style="height: 65px;">
+        <h2><span class="badge badge-pill badge-secondary" style="float: left;">43</span></h2>
+        </div>
+      <!-- <div class="alert gauges">
+      <div class="row">
+      <div class="col-sm-6">
+          <kendo-radialgauge *ngFor="let sensordata of sensorsdata" [pointer]="[{ value: sensordata.CO2/10, color: 'black' }]" [transitions]="true" style="display:block;height:100px;">
+              <kendo-radialgauge-scale
+                 
+                    [majorTicks]="{ visible: showTicks, color: ticksColor }"
+                    [minorTicks]="{ visible: showTicks, color: ticksColor }"
+                    [reverse]="reverse"
+                    [startAngle]="startAngle"
+                    [endAngle]="endAngle"
+                    [rangePlaceholderColor]="rangePlaceholderColor"
+                    [rangeSize]="rangeSize"
+                    >
+                <kendo-radialgauge-scale-labels format="c" [color]="labelsColor" [visible]="showLabels">
+                </kendo-radialgauge-scale-labels>
+                <kendo-radialgauge-scale-ranges>
+                    <kendo-radialgauge-scale-range *ngFor="let green of greens; let i = index"
+                    [from]="i" [to]="i+2" color="rgb({{green}}, 255, 0)">
+                    </kendo-radialgauge-scale-range>
+                   <kendo-radialgauge-scale-range *ngFor="let red of reds; let i = index"
+                    [from]="43+i" [to]="i+51" color="rgb(255, {{red}}, 0)">
+                    </kendo-radialgauge-scale-range>
+                </kendo-radialgauge-scale-ranges>
+              </kendo-radialgauge-scale>
+            </kendo-radialgauge>
+      </div>
+
+      <div class="col-sm-6">
+          <kendo-radialgauge [pointer]="[{ value: ValueCO2, color: 'black' }]" [transitions]="true" style="display:block;height:100px;">
+              <kendo-radialgauge-scale
+                 
+                    [majorTicks]="{ visible: showTicks, color: ticksColor }"
+                    [minorTicks]="{ visible: showTicks, color: ticksColor }"
+                    [reverse]="reverse"
+                    [startAngle]="startAngle"
+                    [endAngle]="endAngle"
+                    [rangePlaceholderColor]="rangePlaceholderColor"
+                    [rangeSize]="rangeSize"
+                    >
+                <kendo-radialgauge-scale-labels format="c" [color]="labelsColor" [visible]="showLabels">
+                </kendo-radialgauge-scale-labels>
+                <kendo-radialgauge-scale-ranges>
+                    <kendo-radialgauge-scale-range *ngFor="let green of greens; let i = index"
+                    [from]="i" [to]="i+2" color="rgb({{green}}, 255, 0)">
+                    </kendo-radialgauge-scale-range>
+                   <kendo-radialgauge-scale-range *ngFor="let red of reds; let i = index"
+                    [from]="43+i" [to]="i+51" color="rgb(255, {{red}}, 0)">
+                    </kendo-radialgauge-scale-range>
+                </kendo-radialgauge-scale-ranges>
+              </kendo-radialgauge-scale>
+            </kendo-radialgauge>
+      </div>
+      <div class="col-sm-6">
+          <kendo-radialgauge [pointer]="[{ value: ValueCO2, color: 'black' }]" [transitions]="true" style="display:block;height:100px;">
+              <kendo-radialgauge-scale
+                 
+                    [majorTicks]="{ visible: showTicks, color: ticksColor }"
+                    [minorTicks]="{ visible: showTicks, color: ticksColor }"
+                    [reverse]="reverse"
+                    [startAngle]="startAngle"
+                    [endAngle]="endAngle"
+                    [rangePlaceholderColor]="rangePlaceholderColor"
+                    [rangeSize]="rangeSize"
+                    >
+                <kendo-radialgauge-scale-labels format="c" [color]="labelsColor" [visible]="showLabels">
+                </kendo-radialgauge-scale-labels>
+                <kendo-radialgauge-scale-ranges>
+                    <kendo-radialgauge-scale-range *ngFor="let green of greens; let i = index"
+                    [from]="i" [to]="i+2" color="rgb({{green}}, 255, 0)">
+                    </kendo-radialgauge-scale-range>
+                   <kendo-radialgauge-scale-range *ngFor="let red of reds; let i = index"
+                    [from]="43+i" [to]="i+51" color="rgb(255, {{red}}, 0)">
+                    </kendo-radialgauge-scale-range>
+                </kendo-radialgauge-scale-ranges>
+              </kendo-radialgauge-scale>
+            </kendo-radialgauge>
+      </div>
+
+      <div class="col-sm-6">
+          <kendo-radialgauge [pointer]="[{ value: ValueCO2, color: 'black' }]" [transitions]="true" style="display:block;height:100px;">
+              <kendo-radialgauge-scale
+                 
+                    [majorTicks]="{ visible: showTicks, color: ticksColor }"
+                    [minorTicks]="{ visible: showTicks, color: ticksColor }"
+                    [reverse]="reverse"
+                    [startAngle]="startAngle"
+                    [endAngle]="endAngle"
+                    [rangePlaceholderColor]="rangePlaceholderColor"
+                    [rangeSize]="rangeSize"
+                    >
+                <kendo-radialgauge-scale-labels format="c" [color]="labelsColor" [visible]="showLabels">
+                </kendo-radialgauge-scale-labels>
+                <kendo-radialgauge-scale-ranges>
+                    <kendo-radialgauge-scale-range *ngFor="let green of greens; let i = index"
+                    [from]="i" [to]="i+2" color="rgb({{green}}, 255, 0)">
+                    </kendo-radialgauge-scale-range>
+                   <kendo-radialgauge-scale-range *ngFor="let red of reds; let i = index"
+                    [from]="43+i" [to]="i+51" color="rgb(255, {{red}}, 0)">
+                    </kendo-radialgauge-scale-range>
+                </kendo-radialgauge-scale-ranges>
+              </kendo-radialgauge-scale>
+            </kendo-radialgauge>
+      </div>
+      </div>
+    </div> -->
+      <div class="alert barChartHistory" style="display: block">
+        <div class="alert heading">Dioxid de Carbon</div>
+        <canvas baseChart [datasets]="CO2ChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend"
+          [chartType]="barChartType" [colors]="CO2_chartColors" height="120">
+        </canvas>
+      </div>
+      <div class="alert barChartHistory" style="display: block">
+        <div class="alert heading">Monoxid de Carbon</div>
+        <canvas baseChart [datasets]="COChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend"
+          [chartType]="barChartType" [colors]="CO_chartColors" height="120">
+        </canvas>
+      </div>
+      <div class="alert barChartHistory" style="display: block">
+        <div class="alert heading">Dioxid de Azot</div>
+        <canvas baseChart [datasets]="NO2ChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend"
+          [chartType]="barChartType" [colors]="NO2_chartColors" height="120">
+        </canvas>
+      </div>
+      <div class="alert barChartHistory" style="display: block">
+        <div class="alert heading">Monoxid de Azot</div>
+        <canvas baseChart [datasets]="NOChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend"
+          [chartType]="barChartType" [colors]="NO_chartColors" height="120">
+        </canvas>
+      </div>
+      <div class="alert barChartHistory" style="display: block">
+        <div class="alert heading">Dioxid de Sulf</div>
+          <canvas baseChart [datasets]="SO2ChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend"
+            [chartType]="barChartType" [colors]="SO2_chartColors" height="120">
+          </canvas>
+        </div>
+        <!-- <div class="alert barChartHistory" style="display: block">
+          <div class="alert heading">Ozon</div>
+          <canvas baseChart [datasets]="O3ChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend"
+            [chartType]="barChartType" [colors]="O3_chartColors" height="120">
+          </canvas>
+        </div> -->
+        <div class="alert barChartHistory" style="display: block">
+          <div class="alert heading">Temperatura</div>
+          <canvas baseChart [datasets]="TempChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend"
+            [chartType]="barChartType" [colors]="TEMP_chartColors" height="120">
+          </canvas>
+        </div>
+        <div class="alert barChartHistory" style="display: block">
+          <div class="alert heading">Presiune</div>
+          <canvas baseChart [datasets]="PressChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend"
+            [chartType]="barChartType" [colors]="PRESS_chartColors" height="120">
+          </canvas>
+        </div>
+        <div class="alert barChartHistory" style="display: block">
+          <div class="alert heading">Umiditate</div>
+            <canvas baseChart [datasets]="HumChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend"
+              [chartType]="barChartType" [colors]="HUM_chartColors" height="120">
+            </canvas>
+          </div>
+    </div>
+</div>
