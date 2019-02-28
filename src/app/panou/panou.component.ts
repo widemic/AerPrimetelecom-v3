@@ -105,44 +105,44 @@ export class PanouComponent implements OnInit, AfterViewInit {
   }
   public refresh(): void {
     this.CO_array.forEach(element => {
-      if (element < 4.4) this.CO_color.push('rgb(107, 201, 38)');
-      if (element > 4.5 && element < 9.4) this.CO_color.push('rgb(209, 207, 30)');
-      if (element > 9.5 && element < 12.4) this.CO_color.push('rgb(239, 187, 15)');
-      if (element > 12.5) this.CO_color.push('rgb(119, 0, 120)');
+      if (element <= 4.4) this.CO_color.push('rgb(107, 201, 38)');
+      if (element > 4.4 && element <= 9.4) this.CO_color.push('rgb(209, 207, 30)');
+      if (element > 9. && element <= 12.4) this.CO_color.push('rgb(239, 187, 15)');
+      if (element > 12.4) this.CO_color.push('rgb(119, 0, 120)');
     });
     this.CO2_array.forEach(element => {
-      if (element < 350) this.CO2_color.push('rgb(107, 201, 38)');
-      if (element > 451 && element < 700) this.CO2_color.push('rgb(209, 207, 30)');
-      if (element > 701 && element < 1000) this.CO2_color.push('rgb(239, 187, 15)');
+      if (element <= 350) this.CO2_color.push('rgb(107, 201, 38)');
+      if (element > 350 && element <= 700) this.CO2_color.push('rgb(209, 207, 30)');
+      if (element > 700 && element <= 1000) this.CO2_color.push('rgb(239, 187, 15)');
     });
     this.NO2_array.forEach(element => {
-      if (element < 0.053) this.NO2_color.push('rgb(107, 201, 38)');
-      if (element > 0.054 && element < 0.1) this.NO2_color.push('rgb(209, 207, 30)');
-      if (element > 0.101 && element < 0.36) this.NO2_color.push('rgb(239, 187, 15)');
-      if (element > 0.361) this.NO2_color.push('rgb(119, 0, 120)');
+      if (element <= 0.053) this.NO2_color.push('rgb(107, 201, 38)');
+      if (element > 0.053 && element <= 0.1) this.NO2_color.push('rgb(209, 207, 30)');
+      if (element > 0.1 && element <= 0.36) this.NO2_color.push('rgb(239, 187, 15)');
+      if (element > 0.36) this.NO2_color.push('rgb(119, 0, 120)');
     });
     this.SO2_array.forEach(element => {
-      if (element < 0.035) this.SO2_color.push('rgb(107, 201, 38)');
-      if (element > 0.035 && element < 0.075) this.SO2_color.push('rgb(209, 207, 30)');
-      if (element > 0.075 && element < 0.185) this.SO2_color.push('rgb(239, 187, 15)');
+      if (element <= 0.035) this.SO2_color.push('rgb(107, 201, 38)');
+      if (element > 0.035 && element <= 0.075) this.SO2_color.push('rgb(209, 207, 30)');
+      if (element > 0.075 && element <= 0.185) this.SO2_color.push('rgb(239, 187, 15)');
       if (element > 0.185) this.SO2_color.push('rgb(119, 0, 120)');
     });
 
     this.TEMP_array.forEach(element => {
-      if (element < 0) this.TEMP_color.push('rgb(5, 20, 200)');
-      if (element > 0 && element < 10) this.TEMP_color.push('rgb(7, 101, 38)');
-      if (element > 10 && element < 25) this.TEMP_color.push('rgb(107, 201, 38)');
-      if (element > 25 && element < 30) this.TEMP_color.push('rgb(209, 207, 30)');
+      if (element <= 0) this.TEMP_color.push('rgb(5, 20, 200)');
+      if (element > 0 && element <= 10) this.TEMP_color.push('rgb(7, 101, 38)');
+      if (element > 10 && element <= 25) this.TEMP_color.push('rgb(107, 201, 38)');
+      if (element > 25 && element <= 30) this.TEMP_color.push('rgb(209, 207, 30)');
       if (element > 30) this.TEMP_color.push('rgb(239, 187, 15)');
     });
     this.PRESS_array.forEach(element => {
-      if (element < 750) this.PRESS_color.push('rgb(209, 207, 30)');
-      if (element > 750 && element < 780) this.PRESS_color.push('rgb(107, 201, 38)');
+      if (element <= 750) this.PRESS_color.push('rgb(209, 207, 30)');
+      if (element > 750 && element <= 780) this.PRESS_color.push('rgb(107, 201, 38)');
       if (element > 780) this.PRESS_color.push('rgb(119, 0, 120)');
     });
     this.HUM_array.forEach(element => {
-      if (element < 70) this.HUM_color.push('rgb(107, 201, 38)');
-      if (element > 70 && element < 75) this.HUM_color.push('rgb(209, 207, 30)');
+      if (element <= 70) this.HUM_color.push('rgb(107, 201, 38)');
+      if (element > 70 && element <= 75) this.HUM_color.push('rgb(209, 207, 30)');
       if (element > 75) this.HUM_color.push('rgb(239, 187, 15)');
 
     });
@@ -195,7 +195,7 @@ export class PanouComponent implements OnInit, AfterViewInit {
 
     this.time_array.forEach(element => {
       var newDate = new Date(element).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-      console.log(newDate);
+      //console.log(newDate);
       this.barChartLabels.push(newDate);
     });
     this.barChartLabels.reverse();
