@@ -51,7 +51,7 @@ export class AppComponent implements OnInit {
         this.location_array.push(item.longitude);
         var lat = item.lattitude;
         var lng = item.longitude;
-        this.markers.push(new Marker(item.lattitude, item.longitude));
+        this.markers.push(new Marker(Number(item.longitude), Number(item.lattitude)));
       })
     })
     console.log(this.markers);
