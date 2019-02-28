@@ -23,7 +23,7 @@ public barChartOptions = {
           fontColor: 'black',  // x axe labels (can be hexadecimal too)
         },
         gridLines: {
-          color: 'rgba(245, 245, 245, 0.2)'  // grid line color (can be removed or changed)
+          color: 'rgba(245, 245, 245, 0.2)',  // grid line color (can be removed or changed)
         }
       }],
       yAxes: [{
@@ -34,7 +34,7 @@ public barChartOptions = {
           beginAtZero: true,
         },
         gridLines: {
-          color: 'rgba(245, 245, 245, 0.2)'  // grid line color (can be removed or changed)
+          color: 'rgba(245, 245, 245, 0.2)',  // grid line color (can be removed or changed)
         },
         scaleLabel: {
           display: false,
@@ -46,7 +46,7 @@ public barChartOptions = {
     legend: {
       display: false,
       labels: {
-        fontColor: 'black', // legend color (can be hexadecimal too)
+        fontColor: 'black',  // legend color (can be hexadecimal too)
       },
     }
   };

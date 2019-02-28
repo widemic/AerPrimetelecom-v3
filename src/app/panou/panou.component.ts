@@ -40,6 +40,7 @@ export class PanouComponent implements OnInit, AfterViewInit {
   public NO_array: any[] = [];
   public NO2_array: any[] = [];
   public SO2_array: any[] = [];
+  public time_array: any[] = [];
   public CO_index: number = 0.874;
   public PRESS_mmhg: number;
   public isDataAvailable: boolean = false;
@@ -50,6 +51,7 @@ export class PanouComponent implements OnInit, AfterViewInit {
   public TEMP_color = [];
   public PRESS_color = [];
   public HUM_color = [];
+
 
   constructor(private sensordataservice: SensorDataService) {
     var i: number;
@@ -79,7 +81,7 @@ export class PanouComponent implements OnInit, AfterViewInit {
         this.NO_array.push(item.NO);
         this.NO2_array.push(item.NO2);
         this.SO2_array.push(item.SO2);
-
+        this.time_array.push(item.messageTime);
       })
       this.CO_array.reverse();
       this.CO2_array.reverse();
@@ -190,6 +192,13 @@ export class PanouComponent implements OnInit, AfterViewInit {
     clone[0].data = data;
     this.PressChartData = clone;
 
+
+    this.time_array.forEach(element => {
+      var newDate = new Date(element).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      console.log(newDate);
+      this.barChartLabels.push(newDate);
+    });
+    this.barChartLabels.reverse();
   }
   //   drawChart(){
   // this.barChartData =[{ data: this.CO2_array, label: 'CO2' },];
@@ -197,7 +206,7 @@ export class PanouComponent implements OnInit, AfterViewInit {
   //     this.barChartData=clone;
   // }
   n: number = Date.now();
-  public barChartLabels = [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+  public barChartLabels = [];
   public barChartType = 'bar';
   public barChartLegend = false;
   public CO2ChartData = [{ data: [], label: 'CO2' }];
