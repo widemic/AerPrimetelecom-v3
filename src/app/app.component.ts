@@ -21,7 +21,7 @@ import { geometry } from '@progress/kendo-drawing';
 
 import { SensorDataModel } from './sensor-data.model';
 import { SensorDataService } from './sensor-data.service';
-import {Marker} from './marker.module';
+import { Marker } from './marker.module';
 
 declare var ol: any;
 @Component({
@@ -30,7 +30,7 @@ declare var ol: any;
   styleUrls: ['./app.component.scss']
 })
 
- 
+
 
 export class AppComponent implements OnInit {
   latitude: number = 26.15;
@@ -39,24 +39,30 @@ export class AppComponent implements OnInit {
   map: any;
   public locationdata: SensorDataModel[];
   public location_array: any[] = [];
+public markers:{lat:number; lng:number}[] = [
+      { lat: 44.42, lng: 26.1 },
+      { lat: 44.46, lng: 26.08 },
+      {lat: 43.24355, lng: 20.13455},
+    ];
 
-
-  public markers: Marker[] = [];
-
+  public mark: Marker[] = [];
+  public mmm:[{lat:string, lng:string}];
   constructor(private sensordataservice: SensorDataService) {
     this.sensordataservice.getLocation().subscribe((data: SensorDataModel[]) => {
       this.locationdata = data;
       this.locationdata.map(item => {
         this.location_array.push(item.lattitude);
         this.location_array.push(item.longitude);
-        var lat = item.lattitude;
-        var lng = item.longitude;
-        this.markers.push(new Marker(Number(item.longitude), Number(item.lattitude)));
+        var lat = Number(item.longitude);
+        var lng = Number(item.lattitude);
+        this.markers.push({lat, lng});
       })
     })
     console.log(this.markers);
+   
   }
   ngOnInit() {
+
     this.map = new ol.Map({
       target: 'map',
       controls: ol.control.defaults({
@@ -71,24 +77,24 @@ export class AppComponent implements OnInit {
       ],
       view: new ol.View({
         center: ol.proj.fromLonLat([this.latitude, this.longitude]),
-        zoom: 12
+        zoom: 10
       })
     });
-
+    // /const markers = this.mmm;
     // const markers = [
     //   { lat: 44.42, lng: 26.1 },
     //   { lat: 44.46, lng: 26.08 }
     // ];
     const features = [];
-
+    console.log(this.markers)
     for (let i = 0; i < this.markers.length; i++) {
       const m = this.markers[i];
       const longitude = m.lng;
       const latitude = m.lat;
-
+      console.log(m);
+      
       const iconFeature = new ol.Feature({
         geometry: new ol.geom.Point(ol.proj.transform([longitude, latitude], 'EPSG:4326', 'EPSG:3857'))
-
       });
 
       const iconStyle = new ol.style.Style({
