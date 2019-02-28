@@ -17,7 +17,11 @@ import { Icon, Style } from 'ol/style.js';
 import 'ol/ol.css';
 import OSM from 'ol/source/OSM';
 import { componentRefresh } from '@angular/core/src/render3/instructions';
+import { geometry } from '@progress/kendo-drawing';
 
+import { SensorDataModel } from './sensor-data.model';
+import { SensorDataService } from './sensor-data.service';
+import {Marker} from './marker.module';
 
 declare var ol: any;
 @Component({
@@ -26,14 +30,32 @@ declare var ol: any;
   styleUrls: ['./app.component.scss']
 })
 
-
+ 
 
 export class AppComponent implements OnInit {
-  latitude = 40.423533061444374;
-  longitude = -3.7045899778604507;
+  latitude: number = 26.15;
+  longitude: number = 44.44;
 
   map: any;
+  public locationdata: SensorDataModel[];
+  public location_array: any[] = [];
 
+
+  public markers: Marker[] = [];
+
+  constructor(private sensordataservice: SensorDataService) {
+    this.sensordataservice.getLocation().subscribe((data: SensorDataModel[]) => {
+      this.locationdata = data;
+      this.locationdata.map(item => {
+        this.location_array.push(item.lattitude);
+        this.location_array.push(item.longitude);
+        var lat = item.lattitude;
+        var lng = item.longitude;
+        this.markers.push(new Marker(item.lattitude, item.longitude));
+      })
+    })
+    console.log(this.markers);
+  }
   ngOnInit() {
     this.map = new ol.Map({
       target: 'map',
@@ -48,31 +70,32 @@ export class AppComponent implements OnInit {
         })
       ],
       view: new ol.View({
-        center: ol.proj.fromLonLat([-3.7045899778604507, 40.423533061444374]),
-        zoom: 13
+        center: ol.proj.fromLonLat([this.latitude, this.longitude]),
+        zoom: 12
       })
     });
 
-    const markers = [
-      { lat: 40.433533061444374, lng: -3.7145899778604507 },
-      { lat: 40.4135330614443741, lng: -3.7045899778604507 }
-    ];
+    // const markers = [
+    //   { lat: 44.42, lng: 26.1 },
+    //   { lat: 44.46, lng: 26.08 }
+    // ];
     const features = [];
 
-    for (let i = 0; i < markers.length; i++) {
-      const m = markers[i];
+    for (let i = 0; i < this.markers.length; i++) {
+      const m = this.markers[i];
       const longitude = m.lng;
       const latitude = m.lat;
 
       const iconFeature = new ol.Feature({
         geometry: new ol.geom.Point(ol.proj.transform([longitude, latitude], 'EPSG:4326', 'EPSG:3857'))
+
       });
 
       const iconStyle = new ol.style.Style({
         image: new ol.style.Icon(({
           anchor: [0.5, 1],
           src: '../assets/dot.png',
-          color: 'red'
+          color: 'orange'
         }))
       });
 
@@ -89,8 +112,8 @@ export class AppComponent implements OnInit {
     });
 
     this.map.addLayer(markerVectorLayer);
-    this.map.on('click', function(evt){
-console.log(evt);
+    this.map.on('click', function (evt) {
+      console.log(evt);
     })
   }
 }

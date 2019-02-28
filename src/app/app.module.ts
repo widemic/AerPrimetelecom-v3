@@ -16,7 +16,6 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
   declarations: [
     AppComponent,
     PanouComponent,
-
   ],
   imports: [
     BrowserModule,
@@ -26,7 +25,6 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
     BrowserAnimationsModule,
     HttpClientModule,
     LeafletModule,
-
   ],
   providers: [SensorDataService],
   bootstrap: [AppComponent]

@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class SensorDataService {
 
-  uri = 'http://localhost:4000/waspdata';
+  uri = 'http://aer.primetelecom.ro:4000/waspdata';
 
   constructor(private http: HttpClient) { }
 

@@ -15,4 +15,6 @@ export interface SensorDataModel {
     SO2: number;
     CO2: number;
     batt: number;
+    lattitude: string;
+    longitude: string;
 }

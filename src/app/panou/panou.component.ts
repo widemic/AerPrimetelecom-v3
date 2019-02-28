@@ -31,6 +31,7 @@ export class PanouComponent implements OnInit, AfterViewInit {
 
   public sensorsdata: SensorDataModel[];
   chartsensordata: SensorDataModel[];
+  public locationdata: SensorDataModel[];
   public CO2_array: any[] = [];
   public CO_array: any[] = [];
   public TEMP_array: any[] = [];
@@ -41,6 +42,7 @@ export class PanouComponent implements OnInit, AfterViewInit {
   public NO2_array: any[] = [];
   public SO2_array: any[] = [];
   public time_array: any[] = [];
+  public location_array: any[] = [];
   public CO_index: number = 0.874;
   public PRESS_mmhg: number;
   public isDataAvailable: boolean = false;
@@ -63,6 +65,7 @@ export class PanouComponent implements OnInit, AfterViewInit {
     }
 
     var sum = 0;
+    
     this.sensordataservice.getNodeLastSensorData('3A2B6F057C10549D').subscribe((data: SensorDataModel[]) => {
       this.sensorsdata = data;
       this.sensorsdata.map(item => {
@@ -318,5 +321,50 @@ export class PanouComponent implements OnInit, AfterViewInit {
       pointHoverBorderColor: '#000',
       fontColor: '#000'
     }];
+
+
+    
+public barChartOptions = {}
+//   scaleShowVerticalLines: true,
+//   responsive: true,
+//   title: {
+//     display: true,
+//     text: 'Concentratie CO2 in ultimele 24h',
+//     fontColor: 'black',  // chart title color (can be hexadecimal too)
+//   },
+//   scales: {
+//     xAxes: [{
+//       stacked: false,
+//       ticks: {
+//         fontColor: 'black',  // x axe labels (can be hexadecimal too)
+//       },
+//       gridLines: {
+//         color: 'rgba(245, 245, 245, 0.2)',  // grid line color (can be removed or changed)
+//       }
+//     }],
+//     yAxes: [{
+//       stacked: false,
+//       ticks: {
+//         fontColor: 'black',  // y axes numbers color (can be hexadecimal too)
+//         min: 0,
+//         beginAtZero: true,
+//       },
+//       gridLines: {
+//         color: 'rgba(245, 245, 245, 0.2)',  // grid line color (can be removed or changed)
+//       },
+//       scaleLabel: {
+//         display: false,
+//         labelString: 'scale label',
+//         fontColor: 'black',  // y axe label color (can be hexadecimal too)
+//       }
+//     }]
+//   },
+//   legend: {
+//     display: false,
+//     labels: {
+//       fontColor: 'black',  // legend color (can be hexadecimal too)
+//     },
+//   }
+// };
 
 }
