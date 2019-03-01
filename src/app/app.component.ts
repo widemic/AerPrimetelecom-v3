@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input, OnDestroy } from '@angular/core';
 import { mapChildrenIntoArray } from '@angular/router/src/url_tree';
 import { Source } from 'webpack-sources';
 import { Observable } from 'rxjs/Observable';
@@ -22,6 +22,11 @@ import { geometry } from '@progress/kendo-drawing';
 import { SensorDataModel } from './sensor-data.model';
 import { SensorDataService } from './sensor-data.service';
 import { Marker } from './marker.module';
+import 'rxjs/add/observable/interval';
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/operator/switchMap';
+
+import { timer } from 'rxjs';
 
 declare var ol: any;
 @Component({
@@ -33,58 +38,35 @@ declare var ol: any;
 
 
 export class AppComponent implements OnInit {
-  latitude: number = 26.15;
+
+  @Input() location$: Observable<any>;
+
+    latitude: number = 26.15;
   longitude: number = 44.44;
 
   map: any;
   public locationdata: SensorDataModel[];
   public location_array: any[] = [];
-public markers:{lat:number; lng:number}[] = [
-      { lat: 44.42, lng: 26.1 },
-      { lat: 44.46, lng: 26.08 },
-      {lat: 43.24355, lng: 20.13455},
-    ];
+  public markers: { lat: number; lng: number }[] = [];
 
   public mark: Marker[] = [];
-  public mmm:[{lat:string, lng:string}];
-  constructor(private sensordataservice: SensorDataService) {
-    this.sensordataservice.getLocation().subscribe((data: SensorDataModel[]) => {
-      this.locationdata = data;
-      this.locationdata.map(item => {
-        this.location_array.push(item.lattitude);
-        this.location_array.push(item.longitude);
-        var lat = Number(item.longitude);
-        var lng = Number(item.lattitude);
-        this.markers.push({lat, lng});
-      })
-    })
-    console.log(this.markers);
-   
-  }
+  public mmm: [{ lat: string, lng: string }];
+  constructor(private sensordataservice: SensorDataService) { }
   ngOnInit() {
 
-    this.map = new ol.Map({
-      target: 'map',
-      controls: ol.control.defaults({
-        attributionOptions: {
-          collapsible: false
-        }
-      }),
-      layers: [
-        new ol.layer.Tile({
-          source: new ol.source.OSM()
-        })
-      ],
-      view: new ol.View({
-        center: ol.proj.fromLonLat([this.latitude, this.longitude]),
-        zoom: 10
-      })
-    });
-    // /const markers = this.mmm;
-    // const markers = [
-    //   { lat: 44.42, lng: 26.1 },
-    //   { lat: 44.46, lng: 26.08 }
-    // ];
+   // this.location$ = Observable.interval(1000).startWith(0).switchMap(() => this.sensordataservice.getLocation());
+
+   this.sensordataservice.getLocation().subscribe((data: SensorDataModel[]) => {
+    this.locationdata = data;
+    this.locationdata.map(item => {
+      this.location_array.push(item.lattitude);
+      this.location_array.push(item.longitude);
+      var lat = Number(item.lattitude);
+      var lng = Number(item.longitude);
+      this.markers.push({lat, lng});
+    })
+
+
     const features = [];
     console.log(this.markers)
     for (let i = 0; i < this.markers.length; i++) {
@@ -92,7 +74,7 @@ public markers:{lat:number; lng:number}[] = [
       const longitude = m.lng;
       const latitude = m.lat;
       console.log(m);
-      
+
       const iconFeature = new ol.Feature({
         geometry: new ol.geom.Point(ol.proj.transform([longitude, latitude], 'EPSG:4326', 'EPSG:3857'))
       });
@@ -121,6 +103,54 @@ public markers:{lat:number; lng:number}[] = [
     this.map.on('click', function (evt) {
       console.log(evt);
     })
+
+
+  })
+  console.log(this.markers);
+
+
+
+    // timer(0, 100).subscribe(()=>{
+    //   this.sensordataservice.getLocation().subscribe((data: SensorDataModel[]) => {
+    //     this.locationdata = data;
+    //     this.locationdata.map(item => {
+    //       this.location_array.push(item.lattitude);
+    //       this.location_array.push(item.longitude);
+    //       var lat = Number(item.longitude);
+    //       var lng = Number(item.lattitude);
+    //       this.markers.push({lat, lng});
+    //     })
+    //   })
+
+
+      
+      
+    // })
+   
+    
+    this.map = new ol.Map({
+      target: 'map',
+      controls: ol.control.defaults({
+        attributionOptions: {
+          collapsible: false
+        }
+      }),
+      layers: [
+        new ol.layer.Tile({
+          source: new ol.source.OSM()
+        })
+      ],
+      view: new ol.View({
+        center: ol.proj.fromLonLat([this.latitude, this.longitude]),
+        zoom: 10
+      })
+    });
+    // /const markers = this.mmm;
+    // const markers = [
+    //   { lat: 44.42, lng: 26.1 },
+    //   { lat: 44.46, lng: 26.08 }
+    // ];
+    
   }
 }
 
