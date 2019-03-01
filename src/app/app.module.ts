@@ -10,12 +10,14 @@ import { SensorDataService } from './sensor-data.service'
 import { HttpClientModule } from '@angular/common/http';
 import { PanouComponent } from './panou/panou.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { RegisterNodeComponent } from './register-node/register-node.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     PanouComponent,
+    RegisterNodeComponent,
   ],
   imports: [
     BrowserModule,

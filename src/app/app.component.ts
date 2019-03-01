@@ -21,7 +21,7 @@ import { geometry } from '@progress/kendo-drawing';
 
 import { SensorDataModel } from './sensor-data.model';
 import { SensorDataService } from './sensor-data.service';
-import { Marker } from './marker.module';
+import { Marker } from './marker.model';
 import 'rxjs/add/observable/interval';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/switchMap';
