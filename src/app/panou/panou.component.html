@@ -1,10 +1,12 @@
 <div class="card card-1" style="width: 25rem; height: 95vh;">
 
-    <div >
+  <div class="alert curent-aqi" [ngStyle]="{'background-color':totalIndexColor}">
+    <h2><span class="badge badge-pill badge-secondary" style="float: left;">{{totalIndex}}</span></h2>
+
+    </div>
+    <div  *ngIf= 'sensorsdata.length'>
       
-      <div class="alert curent-aqi" style="height: 65px;">
-        <h2><span class="badge badge-pill badge-secondary" style="float: left;">43</span></h2>
-        </div>
+      
       <!-- <div class="alert gauges">
       <div class="row">
       <div class="col-sm-6">
@@ -111,6 +113,19 @@
       </div>
       </div>
     </div> -->
+
+    <!-- <kendo-chart [transitions]="false">
+      <kendo-chart-series>
+        <kendo-chart-series-item
+            type="column" [data]="CO2ChartData | async">
+        </kendo-chart-series-item>
+  <kendo-chart-category-axis>
+          <kendo-chart-category-axis-item [categories]="categories">
+          </kendo-chart-category-axis-item>
+      </kendo-chart-category-axis>
+      </kendo-chart-series>
+    </kendo-chart> -->
+
       <div class="alert barChartHistory" style="display: block">
         <div class="alert heading">Dioxid de Carbon</div>
         <canvas baseChart [datasets]="CO2ChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend"
@@ -141,12 +156,13 @@
             [chartType]="barChartType" [colors]="SO2_chartColors" height="120">
           </canvas>
         </div>
-        <!-- <div class="alert barChartHistory" style="display: block">
+         <!-- <div class="alert barChartHistory" style="display: block">
           <div class="alert heading">Ozon</div>
           <canvas baseChart [datasets]="O3ChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend"
             [chartType]="barChartType" [colors]="O3_chartColors" height="120">
           </canvas>
-        </div> -->
+        </div>  -->
+
         <div class="alert barChartHistory" style="display: block">
           <div class="alert heading">Temperatura</div>
           <canvas baseChart [datasets]="TempChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend"
@@ -164,6 +180,7 @@
             <canvas baseChart [datasets]="HumChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend"
               [chartType]="barChartType" [colors]="HUM_chartColors" height="120">
             </canvas>
-          </div>
+          </div> 
+          
     </div>
 </div>

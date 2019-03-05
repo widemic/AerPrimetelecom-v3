@@ -7,7 +7,10 @@
 
 
 
+<div *ngIf= 'loadComponent'>
+  <app-panou [NodeID]='loadNodeId'></app-panou>
+  </div>
 
-<app-panou></app-panou>
+  <!-- <app-panou NodeId="3A2B6F057C10549D"></app-panou> -->
 
 <router-outlet></router-outlet>

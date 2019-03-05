@@ -1,6 +1,8 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input, OnChanges, Directive } from '@angular/core';
 import { SensorDataModel } from '../sensor-data.model';
 import { SensorDataService } from '../sensor-data.service';
+import { Observable } from 'rxjs';
+import { ChartsModule } from 'ng2-charts';
 
 
 
@@ -9,10 +11,15 @@ import { SensorDataService } from '../sensor-data.service';
   templateUrl: './panou.component.html',
   styleUrls: ['./panou.component.scss']
 })
-export class PanouComponent implements OnInit, AfterViewInit {
+export class PanouComponent implements OnInit, AfterViewInit, OnChanges {
+  @Input() NodeID: string = '';
 
+
+
+  public ComponentBoolean: boolean;
+  public ComponentStatus: string;
   public barHeight = 120;
-
+  public NodeIdParrent: string;
   public showLabels = false;
   public showTicks = true;
   public reverse = false;
@@ -42,6 +49,7 @@ export class PanouComponent implements OnInit, AfterViewInit {
   public NO2_array: any[] = [];
   public SO2_array: any[] = [];
   public time_array: any[] = [];
+  public DateChart: any[] = [];
   public location_array: any[] = [];
   public CO_index: number = 0.874;
   public PRESS_mmhg: number;
@@ -53,6 +61,8 @@ export class PanouComponent implements OnInit, AfterViewInit {
   public TEMP_color = [];
   public PRESS_color = [];
   public HUM_color = [];
+  public totalIndex: string;
+  public totalIndexColor: string;
 
 
   constructor(private sensordataservice: SensorDataService) {
@@ -63,16 +73,33 @@ export class PanouComponent implements OnInit, AfterViewInit {
     for (i = 255; i >= 0; i = i - 5) {
       this.reds.push(i)
     }
-
     var sum = 0;
-    
-    this.sensordataservice.getNodeLastSensorData('3A2B6F057C10549D').subscribe((data: SensorDataModel[]) => {
+    console.log(this.NodeID)
+  }
+  ngOnChanges() {
+    console.log(this.NodeID);
+    this.NodeIdParrent = this.NodeID;
+
+
+    this.CO2_array = [];
+    this.CO_array = [];
+    this.TEMP_array = [];
+    this.HUM_array = [];
+    this.PRESS_array = [];
+    this.O3_array = [];
+    this.NO_array = [];
+    this.NO2_array = [];
+    this.SO2_array = [];
+    this.time_array = [];
+
+
+    this.sensordataservice.getNodeLastSensorData(this.NodeIdParrent).subscribe((data: SensorDataModel[]) => {
       this.sensorsdata = data;
       this.sensorsdata.map(item => {
         this.PRESS_mmhg = parseInt((item.press * 0.00750061683).toFixed(0));
       })
     })
-    this.sensordataservice.getNodeLastLimitSensorData('3A2B6F057C10549D', 24).subscribe((data: SensorDataModel[]) => {
+    this.sensordataservice.getNodeLastLimitSensorData(this.NodeIdParrent, 24).subscribe((data: SensorDataModel[]) => {
       this.chartsensordata = data;
       this.chartsensordata.map(item => {
         this.CO2_array.push(item.CO2);
@@ -96,112 +123,167 @@ export class PanouComponent implements OnInit, AfterViewInit {
       this.PRESS_array.reverse();
       this.O3_array.reverse();
     })
+
     this.isDataAvailable = true;
-
-
+    if (this.NodeID === undefined) {
+      this.totalIndex = "Nici un Dispozitiv";
+      this.totalIndexColor = 'gray';
+    }
+    else {
+    this.totalIndex = "50";
+    this.totalIndexColor = 'green';
+    }
+    //console.log(this.barChartLabels);
+    console.log(this.totalIndex);
+    setTimeout(() => { this.refresh() }, 500)
+    //this.refresh();
   }
   ngOnInit() {
+    // console.log(this.NodeID)
+    // this.NodeIdParrent = this.NodeID;
 
+    // this.sensordataservice.getNodeLastSensorData(this.NodeIdParrent).subscribe((data: SensorDataModel[]) => {
+    //   this.sensorsdata = data;
+    //   this.sensorsdata.map(item => {
+    //     this.PRESS_mmhg = parseInt((item.press * 0.00750061683).toFixed(0));
+    //   })
+    // })
+    // this.sensordataservice.getNodeLastLimitSensorData(this.NodeIdParrent, 24).subscribe((data: SensorDataModel[]) => {
+    //   this.chartsensordata = data;
+    //   this.chartsensordata.map(item => {
+    //     this.CO2_array.push(item.CO2);
+    //     this.CO_array.push(item.CO);
+    //     this.TEMP_array.push(item.temp);
+    //     this.HUM_array.push(item.hum);
+    //     this.PRESS_array.push(parseInt((item.press * 0.00750061683).toFixed(0)));
+    //     this.O3_array.push(item.O3);
+    //     this.NO_array.push(item.NO);
+    //     this.NO2_array.push(item.NO2);
+    //     this.SO2_array.push(item.SO2);
+    //     this.time_array.push(item.messageTime);
+    //   })
+    //   this.CO_array.reverse();
+    //   this.CO2_array.reverse();
+    //   this.NO2_array.reverse();
+    //   this.NO_array.reverse();
+    //   this.SO2_array.reverse();
+    //   this.TEMP_array.reverse();
+    //   this.HUM_array.reverse();
+    //   this.PRESS_array.reverse();
+    //   this.O3_array.reverse();
+    // })
+    // this.isDataAvailable = true;
+    // console.log(this.CO2_array);
   }
   ngAfterViewInit() {
-    setTimeout(() => { this.refresh() }, 1000)
+    //setTimeout(() => { this.refresh() }, 500)
   }
   public refresh(): void {
-    this.CO_array.forEach(element => {
-      if (element <= 4.4) this.CO_color.push('rgb(107, 201, 38)');
-      if (element > 4.4 && element <= 9.4) this.CO_color.push('rgb(209, 207, 30)');
-      if (element > 9. && element <= 12.4) this.CO_color.push('rgb(239, 187, 15)');
-      if (element > 12.4) this.CO_color.push('rgb(119, 0, 120)');
-    });
-    this.CO2_array.forEach(element => {
-      if (element <= 350) this.CO2_color.push('rgb(107, 201, 38)');
-      if (element > 350 && element <= 700) this.CO2_color.push('rgb(209, 207, 30)');
-      if (element > 700 && element <= 1000) this.CO2_color.push('rgb(239, 187, 15)');
-    });
-    this.NO2_array.forEach(element => {
-      if (element <= 0.053) this.NO2_color.push('rgb(107, 201, 38)');
-      if (element > 0.053 && element <= 0.1) this.NO2_color.push('rgb(209, 207, 30)');
-      if (element > 0.1 && element <= 0.36) this.NO2_color.push('rgb(239, 187, 15)');
-      if (element > 0.36) this.NO2_color.push('rgb(119, 0, 120)');
-    });
-    this.SO2_array.forEach(element => {
-      if (element <= 0.035) this.SO2_color.push('rgb(107, 201, 38)');
-      if (element > 0.035 && element <= 0.075) this.SO2_color.push('rgb(209, 207, 30)');
-      if (element > 0.075 && element <= 0.185) this.SO2_color.push('rgb(239, 187, 15)');
-      if (element > 0.185) this.SO2_color.push('rgb(119, 0, 120)');
-    });
+    if (this.NodeID != null) {
+      console.log(this.NodeID)
+      this.CO_array.forEach(element => {
+        if (element <= 4.4) this.CO_color.push('rgb(107, 201, 38)');
+        if (element > 4.4 && element <= 9.4) this.CO_color.push('rgb(209, 207, 30)');
+        if (element > 9. && element <= 12.4) this.CO_color.push('rgb(239, 187, 15)');
+        if (element > 12.4) this.CO_color.push('rgb(119, 0, 120)');
+      });
+      this.CO2_array.forEach(element => {
+        if (element <= 350) this.CO2_color.push('rgb(107, 201, 38)');
+        if (element > 350 && element <= 700) this.CO2_color.push('rgb(209, 207, 30)');
+        if (element > 700 && element <= 1000) this.CO2_color.push('rgb(239, 187, 15)');
+      });
+      this.NO2_array.forEach(element => {
+        if (element <= 0.053) this.NO2_color.push('rgb(107, 201, 38)');
+        if (element > 0.053 && element <= 0.1) this.NO2_color.push('rgb(209, 207, 30)');
+        if (element > 0.1 && element <= 0.36) this.NO2_color.push('rgb(239, 187, 15)');
+        if (element > 0.36) this.NO2_color.push('rgb(119, 0, 120)');
+      });
+      this.SO2_array.forEach(element => {
+        if (element <= 0.035) this.SO2_color.push('rgb(107, 201, 38)');
+        if (element > 0.035 && element <= 0.075) this.SO2_color.push('rgb(209, 207, 30)');
+        if (element > 0.075 && element <= 0.185) this.SO2_color.push('rgb(239, 187, 15)');
+        if (element > 0.185) this.SO2_color.push('rgb(119, 0, 120)');
+      });
 
-    this.TEMP_array.forEach(element => {
-      if (element <= 0) this.TEMP_color.push('rgb(5, 20, 200)');
-      if (element > 0 && element <= 10) this.TEMP_color.push('rgb(7, 101, 38)');
-      if (element > 10 && element <= 25) this.TEMP_color.push('rgb(107, 201, 38)');
-      if (element > 25 && element <= 30) this.TEMP_color.push('rgb(209, 207, 30)');
-      if (element > 30) this.TEMP_color.push('rgb(239, 187, 15)');
-    });
-    this.PRESS_array.forEach(element => {
-      if (element <= 750) this.PRESS_color.push('rgb(209, 207, 30)');
-      if (element > 750 && element <= 780) this.PRESS_color.push('rgb(107, 201, 38)');
-      if (element > 780) this.PRESS_color.push('rgb(119, 0, 120)');
-    });
-    this.HUM_array.forEach(element => {
-      if (element <= 70) this.HUM_color.push('rgb(107, 201, 38)');
-      if (element > 70 && element <= 75) this.HUM_color.push('rgb(209, 207, 30)');
-      if (element > 75) this.HUM_color.push('rgb(239, 187, 15)');
+      this.TEMP_array.forEach(element => {
+        if (element <= 0) this.TEMP_color.push('rgb(5, 20, 200)');
+        if (element > 0 && element <= 10) this.TEMP_color.push('rgb(7, 101, 38)');
+        if (element > 10 && element <= 25) this.TEMP_color.push('rgb(107, 201, 38)');
+        if (element > 25 && element <= 30) this.TEMP_color.push('rgb(209, 207, 30)');
+        if (element > 30) this.TEMP_color.push('rgb(239, 187, 15)');
+      });
+      this.PRESS_array.forEach(element => {
+        if (element <= 750) this.PRESS_color.push('rgb(209, 207, 30)');
+        if (element > 750 && element <= 780) this.PRESS_color.push('rgb(107, 201, 38)');
+        if (element > 780) this.PRESS_color.push('rgb(119, 0, 120)');
+      });
+      this.HUM_array.forEach(element => {
+        if (element <= 70) this.HUM_color.push('rgb(107, 201, 38)');
+        if (element > 70 && element <= 75) this.HUM_color.push('rgb(209, 207, 30)');
+        if (element > 75) this.HUM_color.push('rgb(239, 187, 15)');
 
-    });
-
-    let data = this.CO2_array;
-    let clone = JSON.parse(JSON.stringify(this.CO2ChartData));
-    clone[0].data = data;
-    this.CO2ChartData = clone;
-
-    data = this.CO_array;
-    clone = JSON.parse(JSON.stringify(this.COChartData));
-    clone[0].data = data;
-    this.COChartData = clone;
-
-    data = this.NO2_array;
-    clone = JSON.parse(JSON.stringify(this.NO2ChartData));
-    clone[0].data = data;
-    this.NO2ChartData = clone;
-
-    data = this.NO_array;
-    clone = JSON.parse(JSON.stringify(this.NOChartData));
-    clone[0].data = data;
-    this.NOChartData = clone;
-
-    data = this.SO2_array;
-    clone = JSON.parse(JSON.stringify(this.SO2ChartData));
-    clone[0].data = data;
-    this.SO2ChartData = clone;
-
-    data = this.O3_array;
-    clone = JSON.parse(JSON.stringify(this.O3ChartData));
-    clone[0].data = data;
-    this.O3ChartData = clone;
-
-    data = this.TEMP_array;
-    clone = JSON.parse(JSON.stringify(this.TempChartData));
-    clone[0].data = data;
-    this.TempChartData = clone;
-
-    data = this.HUM_array;
-    clone = JSON.parse(JSON.stringify(this.HumChartData));
-    clone[0].data = data;
-    this.HumChartData = clone;
-
-    data = this.PRESS_array;
-    clone = JSON.parse(JSON.stringify(this.PressChartData));
-    clone[0].data = data;
-    this.PressChartData = clone;
+      });
 
 
-    this.time_array.forEach(element => {
-      var newDate = new Date(element).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-      //console.log(newDate);
-      this.barChartLabels.push(newDate);
-    });
-    this.barChartLabels.reverse();
+      let data = this.CO2_array;
+      let clone = JSON.parse(JSON.stringify(this.CO2ChartData));
+      clone[0].data = data;
+      this.CO2ChartData = clone;
+      console.log(clone);
+      console.log(this.CO2ChartData);
+
+      data = this.CO_array;
+      clone = JSON.parse(JSON.stringify(this.COChartData));
+      clone[0].data = data;
+      this.COChartData = clone;
+
+      data = this.NO2_array;
+      clone = JSON.parse(JSON.stringify(this.NO2ChartData));
+      clone[0].data = data;
+      this.NO2ChartData = clone;
+
+      data = this.NO_array;
+      clone = JSON.parse(JSON.stringify(this.NOChartData));
+      clone[0].data = data;
+      this.NOChartData = clone;
+
+      data = this.SO2_array;
+      clone = JSON.parse(JSON.stringify(this.SO2ChartData));
+      clone[0].data = data;
+      this.SO2ChartData = clone;
+
+      data = this.O3_array;
+      clone = JSON.parse(JSON.stringify(this.O3ChartData));
+      clone[0].data = data;
+      this.O3ChartData = clone;
+
+      data = this.TEMP_array;
+      clone = JSON.parse(JSON.stringify(this.TempChartData));
+      clone[0].data = data;
+      this.TempChartData = clone;
+
+      data = this.HUM_array;
+      clone = JSON.parse(JSON.stringify(this.HumChartData));
+      clone[0].data = data;
+      this.HumChartData = clone;
+
+      data = this.PRESS_array;
+      clone = JSON.parse(JSON.stringify(this.PressChartData));
+      clone[0].data = data;
+      this.PressChartData = clone;
+
+      this.barChartLabels.length = 0;
+      this.time_array.forEach(element => {
+        var newDate = new Date(element).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        this.barChartLabels.push(newDate);
+      });
+      this.barChartLabels.reverse();
+
+
+      //this.barChartLabels = this.DateChart;
+      console.log(this.DateChart);
+
+    }
   }
   //   drawChart(){
   // this.barChartData =[{ data: this.CO2_array, label: 'CO2' },];
@@ -209,10 +291,11 @@ export class PanouComponent implements OnInit, AfterViewInit {
   //     this.barChartData=clone;
   // }
   n: number = Date.now();
-  public barChartLabels = [];
+  public barChartLabels: string[] = [];
   public barChartType = 'bar';
   public barChartLegend = false;
-  public CO2ChartData = [{ data: [], label: 'CO2' }];
+  public CO2ChartData = [{ data: [] = [], label: 'CO2' }];
+  //public CO2ChartData : Observable<any[]>;
   public COChartData = [{ data: [], label: 'CO' }];
   public NO2ChartData = [{ data: [], label: 'NO2' }];
   public NOChartData = [{ data: [], label: 'NO' }];
@@ -221,6 +304,7 @@ export class PanouComponent implements OnInit, AfterViewInit {
   public TempChartData = [{ data: [], label: 'Temp' }];
   public HumChartData = [{ data: [], label: 'Hum' }];
   public PressChartData = [{ data: [], label: 'Pres' }];
+
 
   // let clone = JSON.parse(JSON.stringify(this.barChartData));
   // this.barChartData=clone;
@@ -323,48 +407,25 @@ export class PanouComponent implements OnInit, AfterViewInit {
     }];
 
 
-    
-public barChartOptions = {}
-//   scaleShowVerticalLines: true,
-//   responsive: true,
-//   title: {
-//     display: true,
-//     text: 'Concentratie CO2 in ultimele 24h',
-//     fontColor: 'black',  // chart title color (can be hexadecimal too)
-//   },
-//   scales: {
-//     xAxes: [{
-//       stacked: false,
-//       ticks: {
-//         fontColor: 'black',  // x axe labels (can be hexadecimal too)
-//       },
-//       gridLines: {
-//         color: 'rgba(245, 245, 245, 0.2)',  // grid line color (can be removed or changed)
-//       }
-//     }],
-//     yAxes: [{
-//       stacked: false,
-//       ticks: {
-//         fontColor: 'black',  // y axes numbers color (can be hexadecimal too)
-//         min: 0,
-//         beginAtZero: true,
-//       },
-//       gridLines: {
-//         color: 'rgba(245, 245, 245, 0.2)',  // grid line color (can be removed or changed)
-//       },
-//       scaleLabel: {
-//         display: false,
-//         labelString: 'scale label',
-//         fontColor: 'black',  // y axe label color (can be hexadecimal too)
-//       }
-//     }]
-//   },
-//   legend: {
-//     display: false,
-//     labels: {
-//       fontColor: 'black',  // legend color (can be hexadecimal too)
-//     },
-//   }
-// };
 
+  public barChartOptions = {
+    scaleShowVerticalLines: true,
+    responsive: true,
+
+    scales: {
+      xAxes: [{
+        stacked: false,
+
+      }],
+
+    },
+    legend: {
+      display: false,
+      labels: {
+        fontColor: 'black',  // legend color (can be hexadecimal too)
+      },
+    }
+  };
 }
+
+

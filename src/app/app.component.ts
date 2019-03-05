@@ -27,6 +27,7 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/switchMap';
 
 import { timer } from 'rxjs';
+import { stringify } from '@angular/compiler/src/util';
 
 declare var ol: any;
 @Component({
@@ -45,9 +46,12 @@ export class AppComponent implements OnInit {
   longitude: number = 44.44;
 
   map: any;
+  public loadComponent = false;
+  public loadNodeId: String = '';
+  public viz: string = "hidden";
   public locationdata: SensorDataModel[];
   public location_array: any[] = [];
-  public markers: { lat: number; lng: number }[] = [];
+  public markers: { lat: number; lng: number, nodeId: string }[] = [];
 
   public mark: Marker[] = [];
   public mmm: [{ lat: string, lng: string }];
@@ -61,24 +65,28 @@ export class AppComponent implements OnInit {
       this.locationdata.map(item => {
         this.location_array.push(item.lattitude);
         this.location_array.push(item.longitude);
+        this.location_array.push(item.node);
         var lat = Number(item.lattitude);
         var lng = Number(item.longitude);
-        this.markers.push({ lat, lng });
+        var nodeId = String(item.node)
+        this.markers.push({ lat, lng, nodeId });
       })
 
 
       const features = [];
-      console.log(this.markers)
+      //console.log(this.markers)
       for (let i = 0; i < this.markers.length; i++) {
         const m = this.markers[i];
         const longitude = m.lng;
         const latitude = m.lat;
-        console.log(m);
+        const MarkerNodeId = m.nodeId;
+        //console.log(m);
 
         const iconFeature = new ol.Feature({
           geometry: new ol.geom.Point(ol.proj.transform([longitude, latitude], 'EPSG:4326', 'EPSG:3857')),
           name: 'test',
-          str: "strada test"
+          str: "strada test",
+          nodeId: MarkerNodeId
         });
 
         const iconStyle = new ol.style.Style({
@@ -102,24 +110,44 @@ export class AppComponent implements OnInit {
       });
 
       this.map.addLayer(markerVectorLayer);
-      this.map.on('singleclick', function (evt) {
+      // this.map.on('singleclick', function (evt) {
 
-        console.log(evt);
-      })
+      //   console.log(evt);
+      // })
 
-      this.map.on("click", (e) => {
-        this.map.forEachFeatureAtPixel(e.pixel, (feature, layer) => {
-          let id: number = feature.getId();
-          console.log(id);
-          console.log(layer)
-        })
+      // this.map.on("click", e => {
+      //   this.map.forEachFeatureAtPixel(e.pixel, (feature, layer) => {
+      //     let id: number = feature.getId();
+      //     console.log(id);
+      //     console.log(layer)
+      //   })
+      // });
+      this.map.on('singleclick', evt => {
+        var loadNode: string;
+        var feature = this.map.forEachFeatureAtPixel(evt.pixel,
+          function (feature, layer) {
+            // do stuff here with feature
+            var coord = feature.getGeometry().getCoordinates();
+            coord = ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326');
+            var lon = coord[0];
+            var lat = coord[1];
+            console.log(lon, lat);
+            console.log(String(feature.N.nodeId));
+            loadNode = String(feature.N.nodeId);
+            //return [feature, layer];
+
+          });
+        //this.loadNodeId = loadNode;
+        console.log(loadNode);
+        this.loadNodeId = loadNode;
+        this.loadComponent = true;
       });
       function addMarker(lon, lat) {
         console.log('lon:', lon);
         console.log('lat:', lat);
-      
+
         var iconFeatures = [];
-      
+
         var iconFeature = new ol.Feature({
           geometry: new ol.geom.Point(ol.proj.transform([lon, lat], 'EPSG:4326',
             'EPSG:3857')),
@@ -127,16 +155,16 @@ export class AppComponent implements OnInit {
           population: 4000,
           rainfall: 500
         });
-      
+
         vectorSource.addFeature(iconFeature);
       }
-      this.map.on('singleclick',function(event){
+      this.map.on('dblclick', function (event) {
         var lonLat = ol.proj.toLonLat(event.coordinate);
         addMarker(lonLat[0], lonLat[1]);
+        this.viz = "visible";
       });
 
     })
-    console.log(this.markers);
 
 
 
@@ -172,7 +200,7 @@ export class AppComponent implements OnInit {
       ],
       view: new ol.View({
         center: ol.proj.fromLonLat([this.latitude, this.longitude]),
-        zoom: 10
+        zoom: 12
       })
     });
     // /const markers = this.mmm;

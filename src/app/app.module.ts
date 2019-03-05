@@ -11,6 +11,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { PanouComponent } from './panou/panou.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { RegisterNodeComponent } from './register-node/register-node.component';
+import { FormsModule } from '@angular/forms';
+//import { ChartsModule } from '@progress/kendo-angular-charts';
+import 'hammerjs';
+
+
 
 
 @NgModule({
@@ -27,6 +32,7 @@ import { RegisterNodeComponent } from './register-node/register-node.component';
     BrowserAnimationsModule,
     HttpClientModule,
     LeafletModule,
+    FormsModule
   ],
   providers: [SensorDataService],
   bootstrap: [AppComponent]
